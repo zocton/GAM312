@@ -1,0 +1,9 @@
+Control
+	Mouse Click
+
+Non-interactive elements
+	Background
+	Unity-Chan
+Interactive elements
+	start button
+	quit button
