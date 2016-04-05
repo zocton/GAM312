@@ -20,6 +20,7 @@ public class Tile : MonoBehaviour {
     {
         doNotHover = true;
         rend.material.color = new Color(0f,0f,0f);
+        World.Instance().moveCostText.text = "Currently Moving to this tile";
     }
 
     void OnMouseEnter()
@@ -27,7 +28,8 @@ public class Tile : MonoBehaviour {
         if (!doNotHover)
         {
             preservative = rend.material.color;
-            rend.material.color = new Color(255f, 0f, 150f);
+            rend.material.color = new Color(5f, 0f, 0f);
+            World.Instance().moveCostText.text = this.moveCost.ToString();
         }
     }
 

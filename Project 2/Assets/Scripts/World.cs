@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class World : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class World : MonoBehaviour {
     public Point mapSize = new Point(50, 50);
     private Tile[,] map;
     public GameObject tile;
+    public Text moveCostText;
 
     private static World instance = null;
 
