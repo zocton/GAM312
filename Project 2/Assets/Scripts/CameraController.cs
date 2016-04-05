@@ -25,23 +25,14 @@ public class CameraController : MonoBehaviour {
         {
             Camera.main.orthographicSize = 1;
         }
-<<<<<<< HEAD
-        else if (Camera.main.orthographicSize > 1)
-        {
-            if((Camera.main.orthographicSize -= (scroll * zoomInterval)) > 1)
-=======
         else if (Camera.main.orthographicSize >= 1)
         {
             if((Camera.main.orthographicSize -= (scroll * zoomInterval)) >= 1)
->>>>>>> aca5f63b6fa1c4745742d266a3d771142849b5c4
             {
                 Camera.main.orthographicSize -= scroll * zoomInterval * Time.deltaTime;
             }
         }
-<<<<<<< HEAD
-=======
         
->>>>>>> aca5f63b6fa1c4745742d266a3d771142849b5c4
 
         if (Camera.main.orthographicSize > 5)
         {

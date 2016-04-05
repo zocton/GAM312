@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-<<<<<<< HEAD
-=======
 
 [System.Serializable]
 public struct Point
@@ -32,7 +30,6 @@ public struct Point
         return "(" + x.ToString() + ", " + y.ToString() + ")";
     }
 }
->>>>>>> aca5f63b6fa1c4745742d266a3d771142849b5c4
 
 public class World : MonoBehaviour {
 
@@ -49,11 +46,10 @@ public class World : MonoBehaviour {
     private Tile[,] map;
     public GameObject tile;
     public Text moveCostText;
-<<<<<<< HEAD
-=======
 
     public UIController uic;
->>>>>>> aca5f63b6fa1c4745742d266a3d771142849b5c4
+
+    private GameObject lastMouseHit = null;
 
     private static World instance = null;
 
@@ -153,7 +149,7 @@ public class World : MonoBehaviour {
 
 		// Select the tile
 		selectedTile = map[coords.x, coords.y];
-		selectedTile.SetColor (Color.yellow);
+		selectedTile.SetColor (new Color(0,50,50,1));
 
         UpdateUI();
 	}
@@ -202,6 +198,17 @@ public class World : MonoBehaviour {
         unit.transform.position = GetPositionFromCoords(coords);
     }
 
+    public void MoveTo(Point coords)
+    {
+        if(selectedTile == null || selectedTile.occupant == null)
+        {
+            return;
+        }
+
+        WarpUnit(selectedTile.occupant, coords);
+        Select(coords);
+    }
+
     void Awake()
     {
         GenerateMap();
@@ -214,6 +221,44 @@ public class World : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if(Physics.Raycast(ray, out hit))
+            {
+                lastMouseHit = hit.transform.gameObject;
+
+                if (lastMouseHit != null)
+                {
+                    lastMouseHit.SendMessage("OnMouseDown", null, SendMessageOptions.DontRequireReceiver);
+                }
+            }
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject previousHit = lastMouseHit;
+                lastMouseHit = hit.transform.gameObject;
+
+                if (lastMouseHit != null)
+                {
+                    if(lastMouseHit == previousHit)
+                    {
+                        lastMouseHit.SendMessage("OnMouseUpAsButton", null, SendMessageOptions.DontRequireReceiver);
+                    }
+                    else
+                    {
+                        lastMouseHit.SendMessage("OnMouseDown", null, SendMessageOptions.DontRequireReceiver);
+                    }
+                }
+            }
+        }
 	}
 }

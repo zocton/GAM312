@@ -24,14 +24,6 @@ public class Tile : MonoBehaviour {
             World.Instance().moveCostText.text = "Currently Moving to this tile";
         }
 
-<<<<<<< HEAD
-    void OnMouseUpAsButton()
-    {
-        doNotHover = true;
-        rend.material.color = new Color(0f,0f,0f);
-        World.Instance().moveCostText.text = "Currently Moving to this tile";
-    }
-=======
         void OnMouseEnter()
         {
             if (!doNotHover)
@@ -41,20 +33,13 @@ public class Tile : MonoBehaviour {
                 World.Instance().moveCostText.text = this.moveCost.ToString();
             }
         }
->>>>>>> aca5f63b6fa1c4745742d266a3d771142849b5c4
 
         void OnMouseExit()
         {
-<<<<<<< HEAD
-            preservative = rend.material.color;
-            rend.material.color = new Color(5f, 0f, 0f);
-            World.Instance().moveCostText.text = this.moveCost.ToString();
-=======
             if (!doNotHover)
             {
                 ResetColor();
             }
->>>>>>> aca5f63b6fa1c4745742d266a3d771142849b5c4
         }
         // Update is called once per frame
         void Update () {
@@ -120,7 +105,16 @@ public class Tile : MonoBehaviour {
 
     void OnMouseUpAsButton()
     {
-        World.Instance().Select(coords);
+        if (Input.GetMouseButtonUp(0))
+        {
+            World.Instance().Select(coords);
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            World.Instance().MoveTo(coords);
+        }
+        
     }
 
     void OnMouseEnter()

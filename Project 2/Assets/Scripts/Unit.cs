@@ -19,13 +19,24 @@ public class Unit : MonoBehaviour {
     {
         if(currentTile == null)
         {
-            return new Point(-1, -1);
             throw new System.Exception("Invalid tile reference");
         }
 
         return currentTile.coords;
     }
     
+    public void OnMouseUpAsButton()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            World.Instance().Select(GetCoords());
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            World.Instance().MoveTo(GetCoords());
+        }
+    }
 	// Update is called once per frame
 	void Update ()
     {
