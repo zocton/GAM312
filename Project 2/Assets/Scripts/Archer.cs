@@ -11,12 +11,7 @@ public class Archer : Unit {
         unitName = "Archer";
         print(unitName + " spawned here.");
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    
 
     public override void ActivateSpecial()
     {

@@ -180,6 +180,27 @@ public class World : MonoBehaviour {
     public void WarpUnit(Unit unit, Point coords)
     {
         Tile t = GetTileFromCoords(coords);
+        if (t == null || t.occupant != null)
+        {
+            return;
+        }
+
+        // Remove from old tile
+        Tile oldTile = unit.currentTile;
+        if (oldTile != null)
+        {
+            oldTile.occupant = null;
+        }
+
+        // Add to the new tole
+        unit.currentTile = t;
+        t.occupant = unit;
+        unit.transform.position = GetPositionFromCoords(coords);
+    }
+
+    public void MoveUnit(Unit unit, Point coords)
+    {
+        Tile t = GetTileFromCoords(coords);
         if(t == null || t.occupant != null)
         {
             return;
@@ -195,7 +216,6 @@ public class World : MonoBehaviour {
         // Add to the new tole
         unit.currentTile = t;
         t.occupant = unit;
-        unit.transform.position = GetPositionFromCoords(coords);
     }
 
     public void MoveTo(Point coords)
@@ -205,7 +225,8 @@ public class World : MonoBehaviour {
             return;
         }
 
-        WarpUnit(selectedTile.occupant, coords);
+        selectedTile.occupant.BeginInterpolatedMove(coords);
+        MoveUnit(selectedTile.occupant, coords);
         Select(coords);
     }
 
