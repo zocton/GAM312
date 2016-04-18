@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
 
@@ -10,6 +11,8 @@ public class Unit : MonoBehaviour {
 
     public int hp = 10, moveStat = 3;
     public string unitName = "Unit";
+
+    private List<Point> navPoints = new List<Point>();
     
 	// Use this for initialization
 	public virtual void Start ()
@@ -42,6 +45,11 @@ public class Unit : MonoBehaviour {
         }
     }
 
+    public bool IsMoving()
+    {
+        return (navPoints.Count > 0);
+    }
+
     public float NLerp(float from, float to, float t)
     {
         //t = 4 * Mathf.Pow(t - 0.5f, 3f) + 0.5f;
@@ -61,18 +69,40 @@ public class Unit : MonoBehaviour {
         interpolationParam = 0.0f;
     }
 
+    public void NavigateTo(Point coords)
+    {
+        navPoints = GetComponent<Navigator>().ComputePath(GetCoords(), coords);
+    }
 	// Update is called once per frame
 	void Update ()
     {
-        if(interpolationParam <= 1.0f)
+        if(interpolationParam <= 1.0f && navPoints.Count > 0)
         {
-            Vector3 destination = World.Instance().GetPositionFromCoords(GetCoords());
+            // Get the first emelent of navPoints
+            Point nextPoint = navPoints[0];
+
+            // Use that first element as destination
+            Vector3 destination = World.Instance().GetPositionFromCoords(nextPoint);
+            
             transform.position = VectorInterpolate(lastPosition, destination, interpolationParam);
             interpolationParam += Time.deltaTime;
+
+            // If interpolationParam is >= 1f, it's time to go to the next navPoint element
+            if(interpolationParam >= 1.0f)
+            {
+                lastPosition = World.Instance().GetPositionFromCoords(nextPoint);
+                navPoints.RemoveAt(0);
+                interpolationParam = 0.0f;
+            }
         }
         
 	}
-
+/*
+    void GrabPath()
+    {
+        Navigator.ComputePath(GetCoords(), World.Instance().get)
+    }
+*/
     public virtual void ActivateSpecial()
     {
 

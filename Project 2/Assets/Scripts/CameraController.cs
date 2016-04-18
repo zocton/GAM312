@@ -20,27 +20,17 @@ public class CameraController : MonoBehaviour {
         transform.position += new Vector3(vertical, 0f, -vertical) * maxPanSpeed * Time.deltaTime;
         transform.position += new Vector3(-horizontal, 0f, -horizontal) * maxPanSpeed * Time.deltaTime;
 
-        
+        Camera.main.orthographicSize -= scroll * zoomInterval;
+
         if (Camera.main.orthographicSize < 1)
         {
             Camera.main.orthographicSize = 1;
-        }
-        else if (Camera.main.orthographicSize >= 1)
-        {
-            if((Camera.main.orthographicSize -= (scroll * zoomInterval)) >= 1)
-            {
-                Camera.main.orthographicSize -= scroll * zoomInterval * Time.deltaTime;
-            }
         }
         
 
         if (Camera.main.orthographicSize > 5)
         {
             Camera.main.orthographicSize = 5;
-        }
-        else
-        {
-            Camera.main.orthographicSize -= scroll * zoomInterval;
         }
     }
 }

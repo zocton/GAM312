@@ -25,6 +25,15 @@ public struct Point
         return new Point(a.x - b.x, a.y - b.y);
     }
 
+    public static bool operator ==(Point a, Point b)
+    {
+        return (a.x == b.x && a.y == b.y);
+    }
+
+    public static bool operator !=(Point a, Point b)
+    {
+        return (a.x != b.x || a.y != b.y);
+    }
     public override string ToString()
     {
         return "(" + x.ToString() + ", " + y.ToString() + ")";
@@ -224,6 +233,13 @@ public class World : MonoBehaviour {
         {
             return;
         }
+
+        if (selectedTile.occupant.IsMoving())
+        {
+            return;
+        }
+
+        selectedTile.occupant.NavigateTo(coords);
 
         selectedTile.occupant.BeginInterpolatedMove(coords);
         MoveUnit(selectedTile.occupant, coords);
