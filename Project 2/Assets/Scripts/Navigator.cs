@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using UnityEngine;
 using System;
 using System.Collections;
@@ -40,8 +40,8 @@ public class Navigator : MonoBehaviour {
 	}
 }
 
+*/
 
-/*
 using UnityEngine;
 using System;
 using System.Collections;
@@ -55,7 +55,7 @@ class Node
     public Point CurrentCoords { get; set; }
     public Node Parent { get; set; }
 
-    public Node(int costValue, Point coords, ref Node parent)
+    public Node(int costValue, Point coords, Node parent)
     {
         CurrentMoveCost = costValue;
         CurrentCoords = coords;
@@ -84,7 +84,7 @@ class Node
 
     public float CalculateCost(Point goal)
     {
-        Tile tile = World.Instance().GetTile(coords);
+        Tile tile = World.Instance().GetTileFromCoords(coords);
 
         return MoveCost(tile.coords, goal) + Heuristic(tile.coords, goal);
     }
@@ -103,7 +103,7 @@ public class Navigator : MonoBehaviour
         return (a < 0 ? -1 : 1);
     }
 
-    public List<Point> ComputePath(Point from, Point to)
+    public List<Point> ComputePath(Point start, Point goal)
     {
         List<Point> result = new List<Point>();
 
@@ -113,12 +113,59 @@ public class Navigator : MonoBehaviour
 
 
         // You'll need a list of open nodes, a list of closed nodes, and a current node.
+        List<Node> openSet = new List<Node>();
+        List<Node> closedSet = new List<Node>();
+
+        Node currentNode = new Node(World.Instance().GetTileFromCoords(start).moveCost, start, null);
+        Node cameFrom = currentNode.Parent;
 
         // Add the first node to the open list.
+        openSet.Add(currentNode);
 
         // Loop over the open list until it is empty.
+        while(openSet != null)
+        {
+            if(currentNode.CurrentCoords == goal)
+            {
+                return ReconstructedPath(cameFrom.CurrentCoords, goal); // maybe start not cameFrom
+            }
 
+            openSet.Remove(currentNode);
+            closedSet.Add(currentNode);
+
+            // List of neighbors
+            List<Node> neighbors = new List<Node>();
+
+            neighbors.Add(new Node(World.Instance().GetTileFromCoords(start + new Point(0, 1)).moveCost, start + new Point(0, 1), currentNode)); // above node
+            neighbors.Add(new Node(World.Instance().GetTileFromCoords(start + new Point(1, 0)).moveCost, start + new Point(1, 0), currentNode)); // node to the right
+            neighbors.Add(new Node(World.Instance().GetTileFromCoords(start + new Point(0, -1)).moveCost, start + new Point(0, -1), currentNode)); // node below
+            neighbors.Add(new Node(World.Instance().GetTileFromCoords(start + new Point(-1, 0)).moveCost, start + new Point(-1, 0), currentNode)); // node to the left
+
+            foreach(Node n in neighbors)
+            {
+                if (closedSet.Contains(n))
+                {
+                    continue;
+                }
+                float tempCost = g(currentNode) + DistanceBetween(currentNode, n);
+                if (!openSet.Contains(n))
+                {
+                    openSet.Add(n);
+                }
+                else if(tempCost >= g(n))
+                {
+                    continue; // path cost is worse than a previously calculated cost
+                }
+                n.Parent = currentNode;
+                g(n) = tempCost;
+                f(n) = g(n) + h(n, goal);
+            }
+        }
         // If there are no nodes left in the open list, we can't find a valid path.  Return a null list.
+        if(openSet.Count == 0)
+        {
+            return null;
+        }
 
         // If we've reached the destination, we're done looping.
 
@@ -135,5 +182,9 @@ public class Navigator : MonoBehaviour
 
         return result;
     }
+
+    public List<Point> ReconstructedPath(Point start, Point current)
+    {
+        return null;
+    }
 }
-*/
