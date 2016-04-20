@@ -190,12 +190,15 @@ public class Navigator : MonoBehaviour
     }
 }
 ------------------------------------------*/
+
 class TileNode
 {
     public Point coords;
     public TileNode parent;
 
     public float terrainCost;
+    private float manhattanDistance;
+    private Unit occupant;
 
     public TileNode(Point coords, TileNode parent, Point goal)
     {
@@ -204,6 +207,68 @@ class TileNode
 
         Tile tile = World.Instance().GetTileFromCoords(coords);
         terrainCost = tile.moveCost;
+
+        manhattanDistance = Heuristic(coords, goal); // initialize manhattan distance
+
+        occupant = World.Instance().GetTileFromCoords(coords).occupant;
+    }
+
+    /*
+     * GetDistance() returns the distance (either manhattan or chessboard) to a target coordinate.
+     *
+     * CanAttack() returns whether or not the occupant of the target coordinates can be attacked by this Unit.
+     *
+     * Attack() performs the calculations to make a Unit attack another.
+     *
+     * Hit() performs the calculations for a Unit to take damage (and perhaps die).
+     *
+     */
+
+    // Method for grabbing the distance
+    public float GetDistance()
+    {
+        return manhattanDistance;
+    }
+
+    // Method for checking if a target can be attacked
+    public bool CanAttack(Tile target)
+    {
+        return (target.occupant.isAttackable);
+    }
+
+    // Method for attacking other units
+    public void Attack(Tile target)
+    {
+        //  If the target is attackable apply hit() function
+        if (CanAttack(target))
+        {
+            Hit(target);
+        }
+    }
+
+    // Method for appying hit damage
+    void Hit(Tile target)
+    {
+        // Make sure there is a target
+        if(target.occupant != null)
+        {
+            target.occupant.hp -= Mathf.Abs(target.occupant.defense - occupant.attackPower);
+
+            if (target.occupant.hp <= 0)
+            {
+                Kill(target);
+            }
+        }
+    }
+
+    // Method for killing a unit
+    public void Kill(Tile target)
+    {
+        // Make sure there is a target
+        if(target.occupant != null)
+        {
+            GameObject.DestroyObject(target.occupant.gameObject);
+        }
     }
 
     public float GrabCostFunction(Point from, Point to)
@@ -340,3 +405,4 @@ public class Navigator : MonoBehaviour
         return null;
     }
 }
+ 

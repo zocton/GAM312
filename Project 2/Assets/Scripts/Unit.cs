@@ -9,10 +9,13 @@ public class Unit : MonoBehaviour {
     private Vector3 lastPosition;
     private float interpolationParam = 0f;
 
-    public int hp = 10, moveStat = 3;
+    // Unit info for fighting
+    public int hp = 10, moveStat = 3, defense = 5, attackPower = 5;
     public string unitName = "Unit";
 
     private List<Point> navPoints = new List<Point>();
+
+    public bool isAttackable; // Still needs to be implemented properly
     
 	// Use this for initialization
 	public virtual void Start ()
@@ -21,7 +24,7 @@ public class Unit : MonoBehaviour {
         World.Instance().WarpUnit(this, GetCoords());
         lastPosition = transform.position;
 	}
-
+    
     public Point GetCoords()
     {
         if(currentTile == null)
