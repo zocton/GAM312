@@ -14,6 +14,7 @@ public class Mage : Unit {
 
     public override void ActivateSpecial()
     {
+        World.Instance().WarpUnit(this, GetCoords() + new Point(5, 5)); // Flash away from enemies
         print("Blink!");
     }
 }

@@ -15,6 +15,24 @@ public class Archer : Unit {
 
     public override void ActivateSpecial()
     {
+        if(CanAttack(currentTarget))
+        {
+            TileNode distance = new TileNode(GetCoords(), null, currentTarget.GetCoords()); // Hold the distance between this unit and the target unit
+
+            // Constraints for different range arrow volleys
+            if(distance.GetDistance() >= 2f && distance.GetDistance() <= 5f)
+            {
+                attackPowerSpecial = 5; // Mid range
+            }
+            else if(distance.GetDistance() < 2f)
+            {
+                attackPowerSpecial = 3; // Close range
+            }
+            else if(distance.GetDistance() > 5f)
+            {
+                attackPowerSpecial = 7; // Longshot
+            }
+        }
         print("Volley!");
     }
 }

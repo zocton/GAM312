@@ -50,6 +50,7 @@ public class World : MonoBehaviour {
     public Tile cliffrockTile;
     public Tile snowrockTile;
     public Tile selectedTile = null;
+    public Unit selectedUnit = null;
 
     public Point mapSize = new Point(50, 50);
     private Tile[,] map;
@@ -163,9 +164,42 @@ public class World : MonoBehaviour {
         UpdateUI();
 	}
 
+    public void Select(Unit target)
+    {
+        Unit lastSelection = selectedUnit;
+
+        // Reset old selected unit
+        if (selectedUnit != null)
+        {
+            selectedUnit.GetComponent<Renderer>().material.color = new Color(0f, 0f, 0f);
+            selectedUnit = null;
+
+            UpdateUI();
+        }
+
+        // Ensure we're within the bounds of the tile map
+        if (target.GetCoords().x < 0 || target.GetCoords().x >= mapSize.x || target.GetCoords().y < 0 || target.GetCoords().y >= mapSize.y)
+            return;
+
+        // Cancel selection if it was already selected
+        if (lastSelection == selectedUnit)
+            return;
+
+        // Select the unit
+        selectedUnit = target;
+        selectedUnit.GetComponent<Renderer>().material.color = new Color(50f, 0f, 0f, 100f);
+        Debug.Log("UNIT SELECTED!");
+        UpdateUI();
+    }
+
     public bool IsSelected(Tile tile)
     {
         return (tile == selectedTile);
+    }
+
+    public bool IsSelectedUnit(Unit unit)
+    {
+        return (unit == selectedUnit);
     }
 
     public void UpdateUI()
@@ -229,8 +263,15 @@ public class World : MonoBehaviour {
 
     public void MoveTo(Point coords)
     {
-        if(selectedTile == null || selectedTile.occupant == null)
+        if(selectedTile == null)
         {
+            return;
+        }
+
+        //FIX ME -----------------------------------------------------------------------------------------
+        if(selectedTile.occupant != null)
+        {
+            selectedTile.occupant.currentTarget = GetTileFromCoords(coords).occupant;
             return;
         }
 

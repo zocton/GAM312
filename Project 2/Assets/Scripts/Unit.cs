@@ -10,8 +10,10 @@ public class Unit : MonoBehaviour {
     private float interpolationParam = 0f;
 
     // Unit info for fighting
-    public int hp = 10, moveStat = 3, defense = 5, attackPower = 5;
+    public int hp = 10, moveStat = 3, defense = 5, attackPower = 5, attackPowerSpecial = 0;
     public string unitName = "Unit";
+
+    public Unit currentTarget;
 
     private List<Point> navPoints = new List<Point>();
 
@@ -24,7 +26,60 @@ public class Unit : MonoBehaviour {
         World.Instance().WarpUnit(this, GetCoords());
         lastPosition = transform.position;
 	}
-    
+
+    /*
+     * GetDistance() returns the distance (either manhattan or chessboard) to a target coordinate.
+     *
+     * CanAttack() returns whether or not the occupant of the target coordinates can be attacked by this Unit.
+     *
+     * Attack() performs the calculations to make a Unit attack another.
+     *
+     * Hit() performs the calculations for a Unit to take damage (and perhaps die).
+     *
+     */
+
+    // Method for checking if a target can be attacked
+    public bool CanAttack(Unit target)
+    {
+        currentTarget = target;
+        return (target.isAttackable);
+    }
+
+    // Method for attacking other units
+    public void Attack(Unit target)
+    {
+        //  If the target is attackable apply hit() function
+        if (CanAttack(target))
+        {
+            Hit(target);
+        }
+    }
+
+    // Method for appying hit damage
+    public void Hit(Unit target)
+    {
+        // Make sure there is a target
+        if (target != null)
+        {
+            target.hp -= Mathf.Abs((target.defense - this.attackPower) + this.attackPowerSpecial);
+
+            if (target.hp <= 0)
+            {
+                Kill(target);
+            }
+        }
+    }
+
+    // Method for killing a unit
+    public void Kill(Unit target)
+    {
+        // Make sure there is a target
+        if (target != null)
+        {
+            GameObject.DestroyObject(target.gameObject);
+        }
+    }
+
     public Point GetCoords()
     {
         if(currentTile == null)
@@ -45,6 +100,7 @@ public class Unit : MonoBehaviour {
         if (Input.GetMouseButtonUp(1))
         {
             World.Instance().MoveTo(GetCoords());
+            
         }
     }
 

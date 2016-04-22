@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Fighter : Unit {
 
+    private int buffTimer = 0;
 	// Use this for initialization
 	public override void Start () {
         base.Start();
@@ -11,8 +12,25 @@ public class Fighter : Unit {
         print(unitName + " spawned here.");
 	}
 
+    public void Update()
+    {
+        if(attackPowerSpecial == 0)
+        {
+            attackPowerSpecial += (int)Time.deltaTime;
+        }
+    }
+
     public override void ActivateSpecial()
     {
-        print("Beefing up!");
+        if (CanAttack(currentTarget))
+        {
+            attackPowerSpecial = 0;
+            while(buffTimer <= 5)
+            {
+                attackPowerSpecial = 7; // Have a beefeing up enrage timer for five seconds
+            }
+            attackPowerSpecial = 0;
+        }
+            print("Beefing up!");
     }
 }

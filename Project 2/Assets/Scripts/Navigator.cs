@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using UnityEngine;
 using System;
 using System.Collections;
@@ -40,14 +40,14 @@ public class Navigator : MonoBehaviour {
 	}
 }
 
-*/
 
+/* ------------MY BROKENNESS------------------------
 using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-/* ------------MY BROKENNESS------------------------
+
 // You'll need a node class for storage of the pathfinding costs of each step.  Create one here.
 // It needs coordinates, a reference to a parent node, and a cost value.  Also, put these functions in it:
 class Node
@@ -198,7 +198,7 @@ class TileNode
 
     public float terrainCost;
     private float manhattanDistance;
-    private Unit occupant;
+    
 
     public TileNode(Point coords, TileNode parent, Point goal)
     {
@@ -209,8 +209,6 @@ class TileNode
         terrainCost = tile.moveCost;
 
         manhattanDistance = Heuristic(coords, goal); // initialize manhattan distance
-
-        occupant = World.Instance().GetTileFromCoords(coords).occupant;
     }
 
     /*
@@ -228,47 +226,6 @@ class TileNode
     public float GetDistance()
     {
         return manhattanDistance;
-    }
-
-    // Method for checking if a target can be attacked
-    public bool CanAttack(Tile target)
-    {
-        return (target.occupant.isAttackable);
-    }
-
-    // Method for attacking other units
-    public void Attack(Tile target)
-    {
-        //  If the target is attackable apply hit() function
-        if (CanAttack(target))
-        {
-            Hit(target);
-        }
-    }
-
-    // Method for appying hit damage
-    void Hit(Tile target)
-    {
-        // Make sure there is a target
-        if(target.occupant != null)
-        {
-            target.occupant.hp -= Mathf.Abs(target.occupant.defense - occupant.attackPower);
-
-            if (target.occupant.hp <= 0)
-            {
-                Kill(target);
-            }
-        }
-    }
-
-    // Method for killing a unit
-    public void Kill(Tile target)
-    {
-        // Make sure there is a target
-        if(target.occupant != null)
-        {
-            GameObject.DestroyObject(target.occupant.gameObject);
-        }
     }
 
     public float GrabCostFunction(Point from, Point to)
@@ -306,9 +263,9 @@ class TileNode
     }
 }
 
+/*
 public class Navigator : MonoBehaviour
 {
-
     public static int Abs(int a)
     {
         return (a < 0 ? -a : a);
@@ -405,4 +362,5 @@ public class Navigator : MonoBehaviour
         return null;
     }
 }
+*/
  
