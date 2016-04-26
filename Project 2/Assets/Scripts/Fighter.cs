@@ -12,8 +12,10 @@ public class Fighter : Unit {
         print(unitName + " spawned here.");
 	}
 
-    public void Update()
+    public override void Update()
     {
+        base.Update();
+
         if(attackPowerSpecial == 0)
         {
             attackPowerSpecial += (int)Time.deltaTime;
@@ -31,6 +33,6 @@ public class Fighter : Unit {
             }
             attackPowerSpecial = 0;
         }
-            print("Beefing up!");
+        print("Beefing up!");
     }
 }

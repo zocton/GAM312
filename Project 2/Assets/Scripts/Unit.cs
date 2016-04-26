@@ -42,7 +42,14 @@ public class Unit : MonoBehaviour {
     public bool CanAttack(Unit target)
     {
         currentTarget = target;
-        return (target.isAttackable);
+        if(target != null)
+        {
+            return (target.isAttackable);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     // Method for attacking other units
@@ -106,7 +113,7 @@ public class Unit : MonoBehaviour {
 
     public bool IsMoving()
     {
-        return (navPoints.Count > 0);
+        return (navPoints != null && navPoints.Count > 0);
     }
 
     public float NLerp(float from, float to, float t)
@@ -127,15 +134,22 @@ public class Unit : MonoBehaviour {
         lastPosition = transform.position;
         interpolationParam = 0.0f;
     }
-
+    /*
     public void NavigateTo(Point coords)
     {
         navPoints = GetComponent<Navigator>().ComputePath(GetCoords(), coords);
     }
-	// Update is called once per frame
-	void Update ()
+    */
+    public bool NavigateTo(Point coords)
     {
-        if(interpolationParam <= 1.0f && navPoints.Count > 0)
+        navPoints = GetComponent<Navigator>().ComputePath(GetCoords(), coords);
+        //ResetNavIndicators();
+        return (navPoints != null && navPoints.Count > 0);
+    }
+    // Update is called once per frame
+    public virtual void Update ()
+    {
+        if(interpolationParam <= 1.0f && navPoints != null && navPoints.Count > 0)
         {
             // Get the first emelent of navPoints
             Point nextPoint = navPoints[0];

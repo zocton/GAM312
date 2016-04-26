@@ -42,13 +42,15 @@ public struct Point
 
 public class World : MonoBehaviour {
 
-    public Tile grassTile;
-    public Tile sandTile;
-    public Tile grassrockTile;
-    public Tile mudrockTile;
-    public Tile fossilTile;
-    public Tile cliffrockTile;
-    public Tile snowrockTile;
+    public Tile Grass;
+    public Tile Sandy;
+    public Tile BrownStony;
+    public Tile BorwnStonyLight;
+    public Tile GreyStones;
+    public Tile Fossil;
+    public Tile SandyOrange;
+    public Tile WaterDeepBlue;
+    public Tile WaterLightBlue;
     public Tile selectedTile = null;
     public Unit selectedUnit = null;
 
@@ -80,28 +82,31 @@ public class World : MonoBehaviour {
                 switch (temp)
                 {
                     case 0:
-                        prefab = grassTile;
+                        prefab = Grass;
                         break;
                     case 1:
-                        prefab = sandTile;
+                        prefab = Sandy;
                         break;
                     case 2:
-                        prefab = grassrockTile;
+                        prefab = BrownStony;
                         break;
                     case 3:
-                        prefab = mudrockTile;
+                        prefab = GreyStones;
                         break;
                     case 4:
-                        prefab = fossilTile;
+                        prefab = Fossil;
                         break;
                     case 5:
-                        prefab = cliffrockTile;
+                        prefab = SandyOrange;
                         break;
                     case 6:
-                        prefab = snowrockTile;
+                        prefab = WaterDeepBlue;
+                        break;
+                    case 7:
+                        prefab = WaterLightBlue;
                         break;
                     default:
-                        prefab = grassTile;
+                        prefab = Grass;
                         break;
                 }
                 GameObject g = (GameObject)Instantiate(prefab.gameObject, new Vector3(x, 0, y), Quaternion.identity);
@@ -263,18 +268,18 @@ public class World : MonoBehaviour {
 
     public void MoveTo(Point coords)
     {
-        if(selectedTile == null)
+        if(selectedTile == null || selectedTile.occupant == null)
         {
             return;
         }
-
+        /*
         //FIX ME -----------------------------------------------------------------------------------------
         if(selectedTile.occupant != null)
         {
             selectedTile.occupant.currentTarget = GetTileFromCoords(coords).occupant;
             return;
         }
-
+        
         if (selectedTile.occupant.IsMoving())
         {
             return;
@@ -285,6 +290,16 @@ public class World : MonoBehaviour {
         selectedTile.occupant.BeginInterpolatedMove(coords);
         MoveUnit(selectedTile.occupant, coords);
         Select(coords);
+        */
+        if (!selectedTile.occupant.IsMoving())
+        {
+            if (selectedTile.occupant.NavigateTo(coords))
+            {
+                selectedTile.occupant.BeginInterpolatedMove(coords);
+                MoveUnit(selectedTile.occupant, coords);
+                Select(coords);
+            }
+        }
     }
 
     void Awake()
