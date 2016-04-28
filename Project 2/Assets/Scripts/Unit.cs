@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour {
         currentTile = World.Instance().GetTileFromPosition(transform.position);
         World.Instance().WarpUnit(this, GetCoords());
         lastPosition = transform.position;
+        GetComponent<Animator>().Play("Idle");
 	}
 
     /*
@@ -149,7 +150,14 @@ public class Unit : MonoBehaviour {
     // Update is called once per frame
     public virtual void Update ()
     {
-        if(interpolationParam <= 1.0f && navPoints != null && navPoints.Count > 0)
+        /* ---------------------------------------------------------------- ????????????????????????????????? Animation help
+        GetComponent<Animator>().Play("Idle");
+        if(IsMoving() == true)
+        {
+            GetComponent<Animator>().Play("Run");
+        }
+        */
+        if (interpolationParam <= 1.0f && navPoints != null && navPoints.Count > 0)
         {
             // Get the first emelent of navPoints
             Point nextPoint = navPoints[0];
