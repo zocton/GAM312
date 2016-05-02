@@ -18,6 +18,8 @@ public class Unit : MonoBehaviour {
     private List<Point> navPoints = new List<Point>();
 
     public bool isAttackable; // Still needs to be implemented properly
+
+    public Animator animator;
     
 	// Use this for initialization
 	public virtual void Start ()
@@ -28,6 +30,10 @@ public class Unit : MonoBehaviour {
         GetComponent<Animator>().Play("Idle");
 	}
 
+    public void StartWalking()
+    {
+        animator.SetBool("StartWalking", true);
+    }
     /*
      * GetDistance() returns the distance (either manhattan or chessboard) to a target coordinate.
      *
@@ -150,6 +156,7 @@ public class Unit : MonoBehaviour {
     // Update is called once per frame
     public virtual void Update ()
     {
+        
         /* ---------------------------------------------------------------- ????????????????????????????????? Animation help
         GetComponent<Animator>().Play("Idle");
         if(IsMoving() == true)
@@ -174,6 +181,12 @@ public class Unit : MonoBehaviour {
                 lastPosition = World.Instance().GetPositionFromCoords(nextPoint);
                 navPoints.RemoveAt(0);
                 interpolationParam = 0.0f;
+
+                if (navPoints.Count > 0) {
+                    StartWalking();
+                    Vector3 tarPos = World.Instance().GetPositionFromCoords(navPoints[0]);
+                    transform.rotation = Quaternion.AngleAxis(Vector3.Angle(Vector3.right, tarPos), Vector3.up);
+                }
             }
         }
         

@@ -16,7 +16,7 @@ public class Fighter : Unit {
     {
         base.Update();
 
-        if(attackPowerSpecial == 0)
+        if (attackPowerSpecial == 0)
         {
             attackPowerSpecial += (int)Time.deltaTime;
         }
