@@ -34,5 +34,8 @@ public class Fighter : Unit {
             attackPowerSpecial = 0;
         }
         print("Beefing up!");
+        Attack(base.currentTarget);
+        //GetHit();
+
     }
 }

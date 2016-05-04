@@ -30,9 +30,24 @@ public class Unit : MonoBehaviour {
         GetComponent<Animator>().Play("Idle");
 	}
 
+    public void Idle()
+    {
+        animator.SetBool("Idle", true);
+    }
+
     public void StartWalking()
     {
         animator.SetBool("StartWalking", true);
+    }
+
+    public void StartAttacking()
+    {
+        animator.SetBool("Attack", true);
+    }
+
+    public void TakeDamage()
+    {
+        animator.SetBool("Damage", true);
     }
     /*
      * GetDistance() returns the distance (either manhattan or chessboard) to a target coordinate.
@@ -45,6 +60,10 @@ public class Unit : MonoBehaviour {
      *
      */
 
+    public void GetHit()
+    {
+        TakeDamage();
+    }
     // Method for checking if a target can be attacked
     public bool CanAttack(Unit target)
     {
@@ -67,6 +86,7 @@ public class Unit : MonoBehaviour {
         {
             Hit(target);
         }
+        StartAttacking();
     }
 
     // Method for appying hit damage
@@ -156,14 +176,7 @@ public class Unit : MonoBehaviour {
     // Update is called once per frame
     public virtual void Update ()
     {
-        
-        /* ---------------------------------------------------------------- ????????????????????????????????? Animation help
-        GetComponent<Animator>().Play("Idle");
-        if(IsMoving() == true)
-        {
-            GetComponent<Animator>().Play("Run");
-        }
-        */
+        //Idle();
         if (interpolationParam <= 1.0f && navPoints != null && navPoints.Count > 0)
         {
             // Get the first emelent of navPoints
@@ -184,19 +197,20 @@ public class Unit : MonoBehaviour {
 
                 if (navPoints.Count > 0) {
                     StartWalking();
-                    Vector3 tarPos = World.Instance().GetPositionFromCoords(navPoints[0]);
-                    transform.rotation = Quaternion.AngleAxis(Vector3.Angle(Vector3.right, tarPos), Vector3.up);
+                    
+                    // Rotate your character approriately
+                    Vector3 relativePos = World.Instance().GetPositionFromCoords(navPoints[0]) - transform.position;
+                    transform.rotation = Quaternion.LookRotation(relativePos);
                 }
             }
         }
-        
-	}
-/*
-    void GrabPath()
-    {
-        Navigator.ComputePath(GetCoords(), World.Instance().get)
     }
-*/
+    /*
+        void GrabPath()
+        {
+            Navigator.ComputePath(GetCoords(), World.Instance().get)
+        }
+    */
     public virtual void ActivateSpecial()
     {
 
