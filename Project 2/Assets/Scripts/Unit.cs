@@ -27,9 +27,8 @@ public class Unit : MonoBehaviour {
         currentTile = World.Instance().GetTileFromPosition(transform.position);
         World.Instance().WarpUnit(this, GetCoords());
         lastPosition = transform.position;
-        GetComponent<Animator>().Play("Idle");
 	}
-
+    /*
     public void Idle()
     {
         animator.SetBool("Idle", true);
@@ -49,6 +48,8 @@ public class Unit : MonoBehaviour {
     {
         animator.SetBool("Damage", true);
     }
+
+    */
     /*
      * GetDistance() returns the distance (either manhattan or chessboard) to a target coordinate.
      *
@@ -59,10 +60,20 @@ public class Unit : MonoBehaviour {
      * Hit() performs the calculations for a Unit to take damage (and perhaps die).
      *
      */
-
+    /*
     public void GetHit()
     {
         TakeDamage();
+    }
+    */
+    public virtual void StartAttacking()
+    {
+        // animator.SetBool("Attack", true);
+    }
+
+    public virtual void StartWalking()
+    {
+        // animator.SetBool("StartWalking", true);
     }
     // Method for checking if a target can be attacked
     public bool CanAttack(Unit target)
@@ -141,6 +152,11 @@ public class Unit : MonoBehaviour {
     public bool IsMoving()
     {
         return (navPoints != null && navPoints.Count > 0);
+    }
+
+    public bool IsIdling()
+    {
+        return (animator.GetBool("Idle"));
     }
 
     public float NLerp(float from, float to, float t)
