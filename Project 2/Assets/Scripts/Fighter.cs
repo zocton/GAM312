@@ -70,8 +70,8 @@ public class Fighter : Unit {
 
     public override void ActivateSpecial()
     {
-        Death();
-        //animator.SetBool("Special", true);
+        //Death();
+        animator.SetBool("Special", true);
 
         if (CanAttack(currentTarget))
         {

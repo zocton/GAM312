@@ -17,7 +17,7 @@ public class Unit : MonoBehaviour {
 
     private List<Point> navPoints = new List<Point>();
 
-    public bool isAttackable; // Still needs to be implemented properly
+    public bool isAttackable = true; // Still needs to be implemented properly
 
     public Animator animator;
     
@@ -186,6 +186,13 @@ public class Unit : MonoBehaviour {
     public bool NavigateTo(Point coords)
     {
         navPoints = GetComponent<Navigator>().ComputePath(GetCoords(), coords);
+        if(navPoints != null && navPoints.Count > 0)
+        {
+            StartWalking();
+            Vector3 relativePos = World.Instance().GetPositionFromCoords(navPoints[0]) - transform.position;
+            transform.rotation = Quaternion.LookRotation(relativePos);
+        }
+        
         //ResetNavIndicators();
         return (navPoints != null && navPoints.Count > 0);
     }
