@@ -42,6 +42,10 @@ public struct Point
 
 public class World : MonoBehaviour {
 
+    public Archer archer;
+    public Mage mage;
+    public Fighter fighter;
+
     public Tile Grass;
     public Tile Sandy;
     public Tile BrownStony;

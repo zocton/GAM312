@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Fighter : Unit {
 
+    public ParticleSystem ps;
+    public AudioSource powerUp;
+    public GameObject sword;
     private float buffTimer = 5f;
     private float idleTimer = 7f;
     // Use this for initialization
@@ -52,6 +55,7 @@ public class Fighter : Unit {
     public override void Update()
     {
         base.Update();
+        //ps.transform.position = sword.transform.position;
 
         idleTimer -= Time.deltaTime;
         /*
@@ -71,8 +75,9 @@ public class Fighter : Unit {
     public override void ActivateSpecial()
     {
         //Death();
+        powerUp.Play();
         animator.SetBool("Special", true);
-
+        ps.Play();
         if (CanAttack(currentTarget))
         {
             attackPowerSpecial = 0;

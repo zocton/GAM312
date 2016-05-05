@@ -4,13 +4,15 @@ using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
 
+    public ParticleEmitter pe;
     public Tile currentTile;
 
+    public int playerPoints = 0;
     private Vector3 lastPosition;
     private float interpolationParam = 0f;
 
     // Unit info for fighting
-    public int hp = 10, moveStat = 3, defense = 5, attackPower = 5, attackPowerSpecial = 0;
+    public int hp = 10, moveStat = 3, defense = 5, attackPower = 5, attackPowerSpecial = 1;
     public string unitName = "Unit";
 
     public Unit currentTarget;
@@ -106,11 +108,27 @@ public class Unit : MonoBehaviour {
         // Make sure there is a target
         if (target != null)
         {
-            target.hp -= Mathf.Abs((target.defense - this.attackPower) + this.attackPowerSpecial);
+            target.hp -= Mathf.Abs((target.defense - attackPower) + attackPowerSpecial);
+
+            if(target.defense > 0)
+            {
+                target.defense -= attackPower;
+                print(target.defense);
+            }
+
+            if(target.defense == 0 && target.hp > 0)
+            {
+                target.hp -= attackPower;
+                print(target.hp);
+            }
+
+            print("hit");
 
             if (target.hp <= 0)
             {
                 Kill(target);
+                print("kill");
+                playerPoints++;
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Archer : Unit {
 
+    public AudioSource laserSound;
     // Use this for initialization
     public override void Start()
     {
@@ -15,6 +16,7 @@ public class Archer : Unit {
 
     public override void ActivateSpecial()
     {
+        laserSound.Play();
         if(CanAttack(currentTarget))
         {
             TileNode distance = new TileNode(GetCoords(), null, currentTarget.GetCoords()); // Hold the distance between this unit and the target unit
